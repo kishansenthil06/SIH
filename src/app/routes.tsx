@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { AppShell } from './AppShell';
 import { LandingPage } from '../pages/LandingPage';
 import { LoginPage } from '../pages/LoginPage';
-import { ProtectedRoute } from '../components/auth/ProtectedRoute';
+import { PlatformHubWorkspace } from '../workspaces/overview/PlatformHubWorkspace';
 import { CopilotWorkspace } from '../workspaces/copilot/CopilotWorkspace';
 import { MapExplorerWorkspace } from '../workspaces/map-explorer/MapExplorerWorkspace';
 import { SpeciesProfileWorkspace } from '../workspaces/species-profile/SpeciesProfileWorkspace';
@@ -14,7 +14,7 @@ import { ReportPrintView } from '../workspaces/report-builder/ReportPrintView';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/landing',
     element: <LandingPage />,
   },
   {
@@ -22,26 +22,22 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    element: <ProtectedRoute />,
+    path: '/report/print',
+    element: <ReportPrintView />,
+  },
+  {
+    path: '/',
+    element: <AppShell />,
     children: [
-      {
-        path: '/report/print',
-        element: <ReportPrintView />,
-      },
-      {
-        path: '/',
-        element: <AppShell />,
-        children: [
-          { path: 'copilot', element: <CopilotWorkspace /> },
-          { path: 'map', element: <MapExplorerWorkspace /> },
-          { path: 'species', element: <SpeciesProfileWorkspace /> },
-          { path: 'otolith-lab', element: <OtolithLabWorkspace /> },
-          { path: 'edna-lab', element: <EdnaLabWorkspace /> },
-          { path: 'ingestion', element: <IngestionConsoleWorkspace /> },
-          { path: 'report', element: <ReportBuilderWorkspace /> },
-        ],
-      },
+      { index: true, element: <PlatformHubWorkspace /> },
+      { path: 'overview', element: <PlatformHubWorkspace /> },
+      { path: 'map', element: <MapExplorerWorkspace /> },
+      { path: 'species', element: <SpeciesProfileWorkspace /> },
+      { path: 'edna-lab', element: <EdnaLabWorkspace /> },
+      { path: 'copilot', element: <CopilotWorkspace /> },
+      { path: 'otolith-lab', element: <OtolithLabWorkspace /> },
+      { path: 'ingestion', element: <IngestionConsoleWorkspace /> },
+      { path: 'report', element: <ReportBuilderWorkspace /> },
     ],
   },
 ]);
-

@@ -26,7 +26,7 @@ export function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true);
 
   // Determine redirect target
-  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/copilot';
+  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/overview';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

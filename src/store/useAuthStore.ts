@@ -54,7 +54,7 @@ interface AuthState {
 
 const STORAGE_KEY = 'cmlre_auth_user';
 
-const getInitialUser = (): UserProfile | null => {
+const getInitialUser = (): UserProfile => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -63,7 +63,7 @@ const getInitialUser = (): UserProfile | null => {
   } catch (err) {
     console.error('Failed to load auth user from storage', err);
   }
-  return null;
+  return DEMO_USERS[0];
 };
 
 export const useAuthStore = create<AuthState>((set) => {
