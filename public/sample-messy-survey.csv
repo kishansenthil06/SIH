@@ -1,0 +1,11 @@
+Lat, long , Species Name,Survey Date,SST (C),catch_count,Gear
+9.98,76.28,Sardinella longiceps,15-06-2024,28.4,412,Ring seine
+9.91 ,76.22,Sardinella longiceps,15/06/2024,28.6,388,Ring seine
+10.05,76.31,Sardinella longiceps,2024-06-16,28.9,301,Ring seine
+9.75,76.15,Rastrelliger kanagurta,16-06-2024,28.7,220,Trawl
+9.60,76.10,Rastrelliger kanagurta,2024-06-17,29.1,198,Trawl
+,76.20,Sardinella longiceps,17-06-2024,28.5,275,Ring seine
+10.20,76.40,Thunnus albacares,18-06-2024,29.3,45,Longline
+9.88,76.25,Sardinella longiceps,not-a-date,28.8,330,Ring seine
+25.00,76.30,Sardinella longiceps,18-06-2024,28.2,150,Ring seine
+9.70,76.18,Sardinella longiceps,19-06-2024,abc,295,Ring seine
