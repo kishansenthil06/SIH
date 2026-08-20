@@ -1,9 +1,7 @@
-import { callTool, liveCall, type ToolResult } from './client';
+import { liveCall, type ToolResult } from './client';
 import type { OceanTimeseriesPoint, OceanVariable } from '../types/ocean';
-import { generateRegionTimeseries, generateOceanSnapshot } from '../mock-data/generators/generateOceanTimeseries';
+import type { H3CellValue } from '../types/h3';
 import { TIMESERIES_START, TIMESERIES_END } from '../mock-data/constants';
-
-const LIVE = import.meta.env.VITE_LIVE_OCEAN === 'true';
 
 export interface GetOceanTimeseriesArgs {
   variable: OceanVariable;
@@ -14,13 +12,8 @@ export interface GetOceanTimeseriesArgs {
 
 export function getOceanTimeseries(args: GetOceanTimeseriesArgs): Promise<ToolResult<OceanTimeseriesPoint[]>> {
   const { variable, region = 'kerala_coast', startDate = TIMESERIES_START, endDate = TIMESERIES_END } = args;
-  if (LIVE) {
-    const qs = new URLSearchParams({ variable, region, startDate, endDate });
-    return liveCall('get_ocean_timeseries', { variable, region, startDate, endDate }, `/api/v1/ocean/timeseries?${qs}`);
-  }
-  return callTool('get_ocean_timeseries', { variable, region, startDate, endDate }, () =>
-    generateRegionTimeseries(variable, startDate, endDate)
-  );
+  const qs = new URLSearchParams({ variable, region, startDate, endDate });
+  return liveCall('get_ocean_timeseries', { variable, region, startDate, endDate }, `/api/v1/ocean/timeseries?${qs}`);
 }
 
 export interface GetOceanSnapshotArgs {
@@ -28,7 +21,8 @@ export interface GetOceanSnapshotArgs {
   date: string;
 }
 
-export function getOceanSnapshot(args: GetOceanSnapshotArgs) {
+export function getOceanSnapshot(args: GetOceanSnapshotArgs): Promise<ToolResult<H3CellValue<number>[]>> {
   const { variable, date } = args;
-  return callTool('get_ocean_snapshot', { variable, date }, () => generateOceanSnapshot(variable, date));
+  const qs = new URLSearchParams({ variable, date });
+  return liveCall('get_ocean_snapshot', { variable, date }, `/api/v1/ocean/snapshot?${qs}`);
 }

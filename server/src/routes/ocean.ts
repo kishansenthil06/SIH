@@ -1,7 +1,8 @@
 import { and, eq, gte, lte } from 'drizzle-orm';
 import type { FastifyPluginAsync } from 'fastify';
 import { db } from '../db/client';
-import { oceanTimeseries } from '../db/schema';
+import { oceanGridSnapshots, oceanTimeseries } from '../db/schema';
+import type { H3CellValue } from '../../../src/types/h3';
 
 interface OceanTimeseriesQuery {
   variable?: string;
@@ -9,6 +10,14 @@ interface OceanTimeseriesQuery {
   startDate?: string;
   endDate?: string;
 }
+
+interface OceanSnapshotQuery {
+  variable?: string;
+  date?: string;
+}
+
+// Matches the mock's `runSdm` default date.
+const DEFAULT_SNAPSHOT_DATE = '2024-06-01';
 
 const oceanRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get<{ Querystring: OceanTimeseriesQuery }>(
@@ -45,6 +54,34 @@ const oceanRoutes: FastifyPluginAsync = async (fastify) => {
         .all();
 
       return points;
+    }
+  );
+
+  fastify.get<{ Querystring: OceanSnapshotQuery }>(
+    '/ocean/snapshot',
+    async (request, reply) => {
+      const { variable, date } = request.query;
+
+      if (!variable) {
+        return reply.status(400).send({ error: 'variable is required' });
+      }
+
+      const snapshotDate = date ?? DEFAULT_SNAPSHOT_DATE;
+
+      const cells = await db
+        .select({
+          h3Cell: oceanGridSnapshots.h3Cell,
+          value: oceanGridSnapshots.value,
+          lat: oceanGridSnapshots.lat,
+          lon: oceanGridSnapshots.lon,
+        })
+        .from(oceanGridSnapshots)
+        .where(and(eq(oceanGridSnapshots.variable, variable), eq(oceanGridSnapshots.date, snapshotDate)))
+        .all();
+
+      const result: H3CellValue<number>[] = cells;
+
+      return result;
     }
   );
 };

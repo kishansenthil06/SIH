@@ -1,6 +1,5 @@
-import { callTool, type ToolResult } from './client';
+import { liveCall, type ToolResult } from './client';
 import type { SdmResult } from '../types/species';
-import { generateSdmSnapshot } from '../mock-data/generators/generateSdm';
 
 export interface RunSdmArgs {
   speciesId: string;
@@ -9,5 +8,9 @@ export interface RunSdmArgs {
 
 export function runSdm(args: RunSdmArgs): Promise<ToolResult<SdmResult[]>> {
   const date = args.date ?? '2024-06-01';
-  return callTool('run_sdm', { ...args, date }, () => generateSdmSnapshot(args.speciesId, date));
+  return liveCall('run_sdm', { ...args, date }, '/api/v1/sdm/run', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ speciesId: args.speciesId, date }),
+  });
 }

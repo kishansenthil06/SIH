@@ -1,6 +1,5 @@
-import { callTool, type ToolResult } from './client';
+import { liveCall, type ToolResult } from './client';
 import type { EdnaSample } from '../types/edna';
-import { generateEdnaSamples } from '../mock-data/generators/generateEdna';
 
 export interface QueryEdnaArgs {
   region?: string;
@@ -8,12 +7,9 @@ export interface QueryEdnaArgs {
 }
 
 export function queryEdna(args: QueryEdnaArgs = {}): Promise<ToolResult<EdnaSample[]>> {
-  return callTool('query_edna', { ...args }, () => {
-    const samples = generateEdnaSamples();
-    if (!args.taxonFilter) return samples;
-    const needle = args.taxonFilter.toLowerCase();
-    return samples
-      .map((s) => ({ ...s, detections: s.detections.filter((d) => d.taxon.toLowerCase().includes(needle)) }))
-      .filter((s) => s.detections.length > 0);
-  });
+  const params = new URLSearchParams();
+  if (args.region) params.set('region', args.region);
+  if (args.taxonFilter) params.set('taxonFilter', args.taxonFilter);
+  const qs = params.toString();
+  return liveCall('query_edna', { ...args }, `/api/v1/edna${qs ? `?${qs}` : ''}`);
 }

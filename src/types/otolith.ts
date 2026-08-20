@@ -14,4 +14,5 @@ export interface OtolithPrediction {
   confidence: number;
   alternatives: { speciesId: string; scientificName: string; confidence: number }[];
   shapeDescriptors: { circularity: number; rectangularity: number; aspectRatio: number };
+  modelVersion?: string;
 }

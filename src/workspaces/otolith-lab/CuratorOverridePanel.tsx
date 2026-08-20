@@ -29,7 +29,14 @@ export function CuratorOverridePanel({ specimenId }: CuratorOverridePanelProps) 
     if (!task) return;
     setSubmitting(true);
     try {
-      await submitCuration({ taskId: task.id, decision: 'accept' });
+      await submitCuration({
+        taskId: task.id,
+        decision: 'accept',
+        specimenId: task.specimenId,
+        aiPrediction: task.aiPrediction,
+        aiConfidence: task.aiConfidence,
+        curatorDecision: task.aiPrediction,
+      });
       decide(task.id, 'accepted', task.aiPrediction);
     } finally {
       setSubmitting(false);
@@ -40,7 +47,14 @@ export function CuratorOverridePanel({ specimenId }: CuratorOverridePanelProps) 
     if (!task) return;
     setSubmitting(true);
     try {
-      await submitCuration({ taskId: task.id, decision: 'override' });
+      await submitCuration({
+        taskId: task.id,
+        decision: 'override',
+        specimenId: task.specimenId,
+        aiPrediction: task.aiPrediction,
+        aiConfidence: task.aiConfidence,
+        curatorDecision: chosenSpecies,
+      });
       decide(task.id, 'overridden', chosenSpecies);
       setOverriding(false);
     } finally {

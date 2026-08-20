@@ -59,6 +59,103 @@ sqlite.exec(`
   );
   CREATE INDEX IF NOT EXISTS ocean_timeseries_variable_date_idx
     ON ocean_timeseries (variable, date);
+
+  CREATE TABLE IF NOT EXISTS ocean_grid_snapshots (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    h3_cell TEXT NOT NULL,
+    variable TEXT NOT NULL,
+    date TEXT NOT NULL,
+    value REAL NOT NULL,
+    lat REAL NOT NULL,
+    lon REAL NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS ocean_grid_snapshots_variable_date_idx
+    ON ocean_grid_snapshots (variable, date);
+
+  CREATE TABLE IF NOT EXISTS edna_samples (
+    sample_id TEXT PRIMARY KEY NOT NULL,
+    station_name TEXT NOT NULL,
+    lat REAL NOT NULL,
+    lon REAL NOT NULL,
+    h3_cell TEXT NOT NULL,
+    date TEXT NOT NULL,
+    shannon_index REAL NOT NULL,
+    simpson_index REAL NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS asv_records (
+    asv_id TEXT PRIMARY KEY NOT NULL,
+    sample_id TEXT NOT NULL,
+    taxon TEXT NOT NULL,
+    aphia_id INTEGER,
+    confidence REAL NOT NULL,
+    read_count INTEGER NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS asv_records_sample_id_idx
+    ON asv_records (sample_id);
+
+  CREATE TABLE IF NOT EXISTS otolith_specimens (
+    specimen_id TEXT PRIMARY KEY NOT NULL,
+    image_color TEXT NOT NULL,
+    collected_at TEXT NOT NULL,
+    station_name TEXT NOT NULL,
+    length_mm REAL NOT NULL,
+    status TEXT NOT NULL,
+    true_species_id TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS otolith_predictions (
+    specimen_id TEXT PRIMARY KEY NOT NULL,
+    predicted_species_id TEXT NOT NULL,
+    predicted_scientific_name TEXT NOT NULL,
+    confidence REAL NOT NULL,
+    alternatives TEXT NOT NULL,
+    circularity REAL NOT NULL,
+    rectangularity REAL NOT NULL,
+    aspect_ratio REAL NOT NULL,
+    model_version TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS curation_tasks (
+    id TEXT PRIMARY KEY NOT NULL,
+    specimen_id TEXT NOT NULL,
+    ai_prediction TEXT NOT NULL,
+    ai_confidence REAL NOT NULL,
+    status TEXT NOT NULL,
+    curator_decision TEXT,
+    decided_at TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS literature (
+    id TEXT PRIMARY KEY NOT NULL,
+    title TEXT NOT NULL,
+    authors TEXT NOT NULL,
+    year INTEGER NOT NULL,
+    venue TEXT NOT NULL,
+    url TEXT,
+    snippet TEXT NOT NULL,
+    relevance REAL NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS graph_nodes (
+    id TEXT PRIMARY KEY NOT NULL,
+    label TEXT NOT NULL,
+    type TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS graph_edges (
+    id TEXT PRIMARY KEY NOT NULL,
+    source TEXT NOT NULL,
+    target TEXT NOT NULL,
+    label TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS ingested_points (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    lat REAL NOT NULL,
+    lon REAL NOT NULL,
+    ingested_at TEXT NOT NULL
+  );
 `);
 
 export const db = drizzle(async (sqlText, params, method) => {
