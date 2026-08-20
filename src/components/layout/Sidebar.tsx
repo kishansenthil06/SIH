@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import {
   Bot,
@@ -37,15 +37,21 @@ export function Sidebar() {
 
   return (
     <aside className="flex w-60 flex-shrink-0 flex-col border-r border-[var(--color-border)] bg-[var(--color-bg-elevated)]">
-      <div className="flex items-center gap-2.5 px-4 py-4 border-b border-[var(--color-border)]">
-        <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-md shadow-cyan-500/20">
+      <Link
+        to="/"
+        className="flex items-center gap-2.5 px-4 py-4 border-b border-[var(--color-border)] hover:bg-[var(--color-panel-hover)] transition-colors group cursor-pointer"
+        title="Go to Landing Page"
+      >
+        <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
           <Waves className="h-5 w-5 text-white" />
         </div>
         <div>
-          <p className="text-xs font-bold text-[var(--color-text)] tracking-tight">CMLRE Unified AI</p>
+          <p className="text-xs font-bold text-[var(--color-text)] tracking-tight group-hover:text-cyan-400 transition-colors">
+            CMLRE Unified AI
+          </p>
           <p className="text-[9.5px] text-[var(--color-text-dim)]">Ocean &amp; Fishery Intelligence</p>
         </div>
-      </div>
+      </Link>
 
       <nav className="flex-1 space-y-1 px-2 py-3">
         {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
