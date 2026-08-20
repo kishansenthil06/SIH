@@ -40,20 +40,26 @@ export function LandingPage() {
       {/* Navigation Header */}
       <header className="relative z-10 border-b border-[#1b2333]/80 bg-[#0a0e14]/70 backdrop-blur-md sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center gap-3 group cursor-pointer"
+          >
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
               <Waves className="h-6 w-6 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-base tracking-tight text-white">CMLRE Marine AI</span>
+                <span className="font-bold text-base tracking-tight text-white group-hover:text-cyan-400 transition-colors">
+                  CMLRE Marine AI
+                </span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">
                   SIH 2026
                 </span>
               </div>
               <p className="text-[10.5px] text-[#8a96b3]">Centre for Marine Living Resources &amp; Ecology</p>
             </div>
-          </div>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-7 text-sm text-[#8a96b3]">
             <a href="#features" className="hover:text-cyan-400 transition-colors">
